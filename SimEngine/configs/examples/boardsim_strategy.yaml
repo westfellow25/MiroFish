@@ -1,0 +1,107 @@
+# BoardSim: Digital board of directors evaluates a strategic pivot
+# Run: python -m simengine.run configs/examples/boardsim_strategy.yaml
+
+name: "BoardSim — Should we pivot to AI?"
+description: >
+  A mid-size SaaS company ($50M ARR) is considering pivoting its core product
+  to AI-native. The board meets to discuss. Each member has different interests
+  and risk tolerance.
+
+seed_prompt: >
+  TechFlow Inc is a B2B SaaS company with $50M ARR, 200 employees, and 500
+  enterprise clients. Revenue growth has slowed from 40% to 15% YoY. The CEO
+  proposes a major pivot: rebuild the core product with AI, requiring $20M
+  investment and 18 months. During transition, existing product maintenance
+  continues but no new features. Risk: existing clients may churn. Upside:
+  TAM expands 10x.
+
+environment:
+  type: boardroom
+  name: "TechFlow Board Meeting"
+  max_rounds: 8
+  params:
+    agenda:
+      - "CEO presents the AI pivot proposal"
+      - "Risk assessment and financial projections"
+      - "Vote on the pivot decision"
+    rounds_per_topic: 3
+
+agents:
+  - id: ceo_sarah
+    name: "Sarah Chen"
+    role: "CEO & Founder"
+    persona: >
+      Visionary founder who built TechFlow from zero. Deeply believes AI is
+      existential — either pivot now or die slowly. Tends to be optimistic
+      about timelines. Has 15% equity stake.
+    goals:
+      - "Convince the board to approve the AI pivot"
+      - "Secure the $20M investment commitment"
+    traits:
+      risk_tolerance: 0.9
+      communication_style: "passionate, data-backed"
+      equity_stake: 0.15
+
+  - id: cfo_james
+    name: "James Rodriguez"
+    role: "CFO"
+    persona: >
+      Conservative financial operator. Worried about burn rate and runway.
+      Thinks the pivot timeline is unrealistic. Would prefer a gradual
+      approach — AI features added incrementally. Has seen two startups
+      die from over-ambitious pivots.
+    goals:
+      - "Protect financial stability"
+      - "Propose a phased approach as alternative"
+    traits:
+      risk_tolerance: 0.2
+      communication_style: "analytical, cautious"
+
+  - id: investor_mike
+    name: "Michael Park"
+    role: "Lead Investor (Series B)"
+    persona: >
+      VC partner at a top-tier firm. Owns 25% of TechFlow. Has seen the
+      AI wave make similar companies 10x. Wants aggressive growth but also
+      needs to protect his fund's investment. Will push for metrics and
+      milestones.
+    goals:
+      - "Maximize return on investment"
+      - "Ensure accountability with clear milestones"
+    traits:
+      risk_tolerance: 0.7
+      communication_style: "direct, metrics-focused"
+      ownership: 0.25
+
+  - id: board_linda
+    name: "Linda Nakamura"
+    role: "Independent Board Member"
+    persona: >
+      Former CTO of a Fortune 500 company. Brings deep technical perspective.
+      Skeptical that the team can execute AI pivot in 18 months. Thinks the
+      real risk is talent — can they hire AI engineers fast enough?
+    goals:
+      - "Ensure technical feasibility"
+      - "Raise talent acquisition concerns"
+    traits:
+      risk_tolerance: 0.5
+      communication_style: "thoughtful, technical"
+
+  - id: customer_rep
+    name: "David Kim"
+    role: "VP of Customer Success"
+    persona: >
+      Represents the voice of 500 enterprise clients. Knows that 3 top
+      accounts (30% of revenue) have already asked about AI features.
+      But also knows 40% of clients are resistant to change and might
+      churn during transition.
+    goals:
+      - "Represent customer perspective"
+      - "Warn about churn risk during transition"
+    traits:
+      risk_tolerance: 0.4
+      communication_style: "empathetic, customer-focused"
+
+llm:
+  model: "gpt-4o"
+  temperature: 0.7

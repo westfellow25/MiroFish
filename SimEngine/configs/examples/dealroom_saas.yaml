@@ -1,0 +1,101 @@
+# DealRoom: B2B SaaS sales simulation
+# Simulate how a startup pitches to enterprise buyers
+
+name: "DealRoom — Enterprise SaaS Deal"
+description: >
+  CloudSync (startup) is trying to sell its data integration platform to
+  MegaCorp (Fortune 500). The deal involves multiple stakeholders on the
+  buyer side with different priorities. The seller needs to navigate
+  internal politics and competing priorities.
+
+seed_prompt: >
+  CloudSync offers a data integration platform at $200K/year. MegaCorp
+  currently uses a legacy system that costs $500K/year but switching costs
+  are estimated at $300K (migration, training, downtime). MegaCorp's CTO
+  wants modern tech, but the CFO is focused on cost savings, and the
+  VP of Engineering is worried about migration risk. A competitor,
+  DataBridge, is also pitching at $180K/year but with fewer features.
+
+environment:
+  type: marketplace
+  name: "Enterprise Deal Room"
+  max_rounds: 10
+  params:
+    market_context: >
+      Enterprise data integration market. Buyer is evaluating two vendors.
+      Decision timeline: 6 weeks. Budget approved: up to $250K/year.
+
+agents:
+  - id: seller_ceo
+    name: "Alex Torres"
+    role: "CEO, CloudSync (Seller)"
+    persona: >
+      Aggressive but smart seller. Knows the product is superior to DataBridge.
+      Willing to offer discounts and custom SLAs to close the deal.
+      This deal would be CloudSync's largest client and a major reference.
+    goals:
+      - "Close the deal at $180K+ per year"
+      - "Establish long-term partnership"
+    traits:
+      walk_away_price: 150000
+      negotiation_style: "consultative"
+
+  - id: buyer_cto
+    name: "Rachel Hoffman"
+    role: "CTO, MegaCorp (Buyer - Champion)"
+    persona: >
+      Technology-first thinker. Frustrated with the legacy system.
+      Privately prefers CloudSync over DataBridge for its API quality.
+      But needs to build internal consensus — can't push the decision alone.
+    goals:
+      - "Get the best technical solution"
+      - "Build internal consensus for CloudSync"
+    traits:
+      budget_authority: false
+      technical_preference: "CloudSync"
+
+  - id: buyer_cfo
+    name: "Howard Chen"
+    role: "CFO, MegaCorp (Buyer - Economic)"
+    persona: >
+      Pure numbers person. Doesn't care about technical elegance.
+      Wants the lowest TCO over 3 years. Will push for maximum discount
+      and favorable payment terms. Slightly favors DataBridge on price.
+    goals:
+      - "Minimize total cost of ownership"
+      - "Negotiate favorable payment terms"
+    traits:
+      budget_authority: true
+      price_sensitivity: 0.9
+
+  - id: buyer_vp_eng
+    name: "Priya Sharma"
+    role: "VP Engineering, MegaCorp (Buyer - Technical)"
+    persona: >
+      Risk-averse. Her team will do the migration. Worried about downtime
+      and her team's bandwidth. Needs strong migration support and SLAs.
+      Could block the deal if migration plan isn't solid.
+    goals:
+      - "Ensure zero-downtime migration"
+      - "Get dedicated support during transition"
+    traits:
+      risk_tolerance: 0.2
+      blocker_power: true
+
+  - id: competitor
+    name: "Sam Wright"
+    role: "VP Sales, DataBridge (Competitor)"
+    persona: >
+      Knows DataBridge is weaker technically but cheaper. Strategy is to
+      undercut on price and emphasize stability and lower risk. Will try
+      to create FUD about CloudSync's startup risk.
+    goals:
+      - "Win the deal at any reasonable price"
+      - "Create doubt about CloudSync's stability"
+    traits:
+      walk_away_price: 120000
+      negotiation_style: "aggressive"
+
+llm:
+  model: "gpt-4o"
+  temperature: 0.7
