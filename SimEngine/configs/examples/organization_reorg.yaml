@@ -1,0 +1,91 @@
+# Organization: Simulate a team after a reorg to predict friction
+# Run: python -m simengine configs/examples/organization_reorg.yaml
+
+name: "TalentEcho — Post-reorg team dynamics"
+description: >
+  Engineering org merged two teams. Ex-Team-A manager now reports to
+  Ex-Team-B director. Simulate how information flows, tasks get assigned,
+  and morale shifts in the first weeks after the reorg.
+
+seed_prompt: >
+  A 12-person engineering org just merged two teams. Priya (was VP of Team A)
+  now reports to Marcus (director of Team B). Marcus has different engineering
+  philosophy — ships fast, less review. Priya's team was quality-first.
+  Simulate 2 weeks: who escalates, who delivers, whose morale drops,
+  do any departures feel inevitable?
+
+environment:
+  type: organization
+  name: "PostMerge Engineering"
+  max_rounds: 10
+  params:
+    company_context: >
+      Two engineering teams merged after an org change. 12 people total.
+      Marcus is the new director, Priya (formerly VP) now reports to him.
+
+agents:
+  - id: marcus
+    name: "Marcus Liu"
+    role: "Director of Engineering"
+    persona: >
+      Ships fast, skeptical of lengthy code review. Inherited Priya's team
+      but doesn't know them well. Under pressure from CTO to hit quarterly
+      goals. Tends to assign tasks top-down without much consultation.
+    goals:
+      - "Hit Q3 OKRs"
+      - "Unify team velocity"
+    traits:
+      management_style: "top-down"
+      review_tolerance: 0.2
+    relationships:
+      priya: "direct_report"
+      alex: "direct_report"
+      sam: "direct_report"
+
+  - id: priya
+    name: "Priya Sharma"
+    role: "Senior Engineering Manager"
+    persona: >
+      Quality-first philosophy. Built Team A over 3 years with strong code
+      review culture. Was promised VP promotion pre-reorg. Now feels demoted
+      reporting to Marcus. Quietly frustrated. Loyal to her former team.
+    goals:
+      - "Protect team quality standards"
+      - "Figure out her career path"
+    traits:
+      review_tolerance: 0.9
+      morale_baseline: 55  # lower than default
+    relationships:
+      marcus: "reports_to"
+      alex: "manages"
+
+  - id: alex
+    name: "Alex Rivera"
+    role: "Staff Engineer"
+    persona: >
+      Technical lead, ex-Team A. Works closely with Priya. Strong opinions
+      on code quality. Sees the shift in review standards and is worried.
+      Actively interviewing elsewhere but hasn't decided.
+    goals:
+      - "Maintain engineering standards"
+      - "Decide whether to stay or leave"
+    traits:
+      review_tolerance: 0.95
+      flight_risk: 0.6
+
+  - id: sam
+    name: "Sam Chen"
+    role: "Senior Engineer"
+    persona: >
+      From Team B originally. Happy with the new structure — used to Marcus's
+      style. Wants to help bridge the two cultures but doesn't fully
+      understand Team A's concerns.
+    goals:
+      - "Help merge team cultures"
+      - "Ship features fast"
+    traits:
+      review_tolerance: 0.3
+
+llm:
+  model: "gpt-4o"
+  temperature: 0.7

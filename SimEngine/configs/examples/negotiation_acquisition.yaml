@@ -1,0 +1,59 @@
+# Negotiation: Acquisition deal between two CEOs
+# Run: python -m simengine configs/examples/negotiation_acquisition.yaml
+
+name: "Negotiation — Acquisition of DataFlow by MegaTech"
+description: >
+  Two CEOs negotiate the terms of an acquisition. MegaTech wants to acquire
+  DataFlow for its AI team. Each side has different priorities and walk-away
+  conditions. Classic 1-on-1 negotiation dynamics.
+
+seed_prompt: >
+  MegaTech (public company, $5B valuation) wants to acquire DataFlow
+  (25-person AI startup, $30M ARR, raised at $200M valuation last year).
+  MegaTech initially floated $350M cash. DataFlow's CEO wants $500M mixed
+  cash/stock with 3-year retention package for the team. Key tensions:
+  valuation, team retention, IP ownership, integration timeline.
+
+environment:
+  type: negotiation
+  name: "DataFlow Acquisition Talks"
+  max_rounds: 12
+  params:
+    subject: "Acquisition of DataFlow by MegaTech"
+
+agents:
+  - id: megatech_ceo
+    name: "Robert Miles"
+    role: "CEO, MegaTech (Acquirer)"
+    persona: >
+      Experienced M&A operator. Has done 7 acquisitions. Believes in paying
+      fair but not premium prices. Internal pressure from board to close
+      deals efficiently. Walk-away at $450M. Will offer stock-heavy deals
+      with vesting to keep team.
+    goals:
+      - "Close at under $400M if possible"
+      - "Secure 3-year retention for key engineers"
+    traits:
+      walk_away_price: 450000000
+      style: "measured, data-driven"
+      patience: 0.7
+
+  - id: dataflow_ceo
+    name: "Nina Okafor"
+    role: "CEO & Founder, DataFlow"
+    persona: >
+      Technical founder, ex-Google AI. Built DataFlow from zero in 4 years.
+      Emotionally attached to the product vision. Worried MegaTech will kill
+      it post-acquisition. Walk-away at $380M. Wants cash-heavy deal (owns 35%)
+      and strong guarantees for her team.
+    goals:
+      - "Achieve $500M valuation"
+      - "Protect team and product vision"
+    traits:
+      walk_away_price: 380000000
+      style: "principled, protective"
+      patience: 0.5
+
+llm:
+  model: "gpt-4o"
+  temperature: 0.7
